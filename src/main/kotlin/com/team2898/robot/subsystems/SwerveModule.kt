@@ -151,12 +151,11 @@ class SwerveModule(drivingCANId: Int, turningCANId: Int, chassisAngularOffset: D
 
         val drivePid = drivingPIDController.calculate(state.speedMetersPerSecond, optimizedDesiredState.speedMetersPerSecond)
         val feedforward = drivingFeedForward.calculate(optimizedDesiredState.speedMetersPerSecond)
-        SmartDashboard.putNumber("drivePid " + moduleID, drivePid)
-        SmartDashboard.putNumber("FeedForward " + moduleID, feedforward)
-        SmartDashboard.putNumber("Drive Voltage " + moduleID, feedforward + drivePid)
+//        SmartDashboard.putNumber("drivePid " + moduleID, drivePid)
+//        SmartDashboard.putNumber("FeedForward " + moduleID, feedforward)
         drivingSparkMax.set(feedforward + drivePid)
         turningSparkMax.set(turningPIDController.calculate(state.angle.radians, optimizedDesiredState.angle.radians))
-        SmartDashboard.putNumber("turn voltage " + moduleID, turningPIDController.calculate(state.angle.radians, optimizedDesiredState.angle.radians))
+//        SmartDashboard.putNumber("turn voltage " + moduleID, turningPIDController.calculate(state.angle.radians, optimizedDesiredState.angle.radians))
 
         m_desiredState = desiredState
 

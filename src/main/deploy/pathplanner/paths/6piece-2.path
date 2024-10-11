@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.85582141745541,
-        "y": 5.577308253853149
+        "x": 3.079390993387586,
+        "y": 5.62
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3007444354153246,
-        "y": 5.209933077042905
+        "x": 2.5243140113475007,
+        "y": 5.252624823189756
       },
       "isLocked": false,
       "linkedName": "6piece-1End"
@@ -25,7 +25,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "6piece-2End"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],

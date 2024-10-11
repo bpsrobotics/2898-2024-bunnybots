@@ -32,10 +32,10 @@ class Constants {
     object DriveConstants {
         // Driving Parameters - Note that these are not the maximum capable speeds of
         // the robot, rather the allowed maximum speeds
-        const val MaxSpeedMetersPerSecond = 1.5
+        const val MaxSpeedMetersPerSecond = 4.5
         const val MaxAngularSpeed = 2 * Math.PI // radians per second (2*PI)
         const val DirectionSlewRate = 2.0 // radians per second
-        const val MagnitudeSlewRate = 1.0 // percent per second (1 = 100%)
+        const val MagnitudeSlewRate = 1.8 // percent per second (1 = 100%)
         const val RotationalSlewRate = 10.0 // percent per second (1 = 100%)
 
         // Chassis configuration (left to right dist of center of the wheels)
@@ -101,6 +101,7 @@ class Constants {
         const val DrivingMinOutput = -1.0
         const val DrivingMaxOutput = 1.0
         var TurningP = 0.9
+//        var TurningP = 0.75
         var TurningI = 0.0
         var TurningD = 0.0
 //        var Ks = 0.06 //0.085
@@ -109,7 +110,7 @@ class Constants {
         const val TurningMaxOutput = 1.0
         val DrivingMotorIdleMode = CANSparkBase.IdleMode.kBrake
         val TurningMotorIdleMode = CANSparkBase.IdleMode.kBrake
-        const val DrivingMotorCurrentLimit = 40 // amps
+        const val DrivingMotorCurrentLimit = 30 // amps
         const val TurningMotorCurrentLimit = 10 // amps
     }
 
@@ -135,7 +136,7 @@ class Constants {
         const val TranslationI = 0.0
         const val TranslationD = 0.0
 
-        const val RotationP = 0.5
+        const val RotationP = 0.01
         const val RotationI = 0.0
         const val RotationD = 0.0
 
@@ -158,7 +159,7 @@ class Constants {
             AMP(-0.1),
             SHOOTER1(1.0),
             SHOOTER2(1.3),   //base
-            SIXPIECE1(1.1),
+            SIXPIECE1(1.15),
             SIXPIECE2(1.05)
 
         }
