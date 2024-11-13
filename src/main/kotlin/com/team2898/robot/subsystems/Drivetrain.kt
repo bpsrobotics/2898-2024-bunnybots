@@ -10,6 +10,7 @@ import com.pathplanner.lib.util.GeometryUtil
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig
 import com.pathplanner.lib.util.PIDConstants
 import com.pathplanner.lib.util.ReplanningConfig
+import com.team2898.engine.utils.units.Volts
 import com.team2898.robot.Constants
 import com.team2898.robot.Constants.AutoConstants.RotationD
 import com.team2898.robot.Constants.AutoConstants.RotationI
@@ -29,6 +30,7 @@ import edu.wpi.first.math.util.Units
 import edu.wpi.first.networktables.NetworkTableInstance
 import edu.wpi.first.networktables.StructArrayPublisher
 import edu.wpi.first.units.Measure
+import edu.wpi.first.units.Units.*
 import edu.wpi.first.units.Voltage
 import edu.wpi.first.wpilibj.DriverStation
 import edu.wpi.first.wpilibj.DriverStation.Alliance
@@ -51,7 +53,6 @@ import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity
 import java.io.File
 import java.util.*
 import java.util.function.BooleanSupplier
-import java.util.function.DoubleSupplier
 
 
 object Drivetrain : SubsystemBase() {
@@ -153,58 +154,58 @@ object Drivetrain : SubsystemBase() {
         }
     }
 
-//    /**
-//     * Get a SysIdRoutine for the drive motors.
-//     * @see SysIdRoutine
-//     * @return A custom SysIdRoutine for the drive motors.
-//     */
-//    fun getDriveSysIDRoutine(): SysIdRoutine {
-//        return SysIdRoutine(
-//            SysIdRoutine.Config(),
-//            SysIdRoutine.Mechanism(
-//                { volts: Measure<Voltage> ->
-//                    swerveDrive.modules.forEach {
-//                        it.driveMotor.voltage = volts into Units.Volt
-//                    }
-//                },
-//                { log: SysIdRoutineLog ->
-//                    swerveDrive.modules.forEach {
-//                        logDriveMotor(it, log)
-//                    }
-//                },
-//                this
-//            )
-//        )
-//    }
-//
-//    /**
-//     * Generate a full command to SysID the drive motors
-//     * @return A command that SysIDs the drive motors.
-//     */
-//    fun getDriveSysIDCommand(): Command {
-//        return SequentialCommandGroup(
-//            getDriveSysIDRoutine().dynamic(SysIdRoutine.Direction.kForward),
-//            WaitCommand(1.0),
-//            getDriveSysIDRoutine().dynamic(SysIdRoutine.Direction.kReverse),
-//            WaitCommand(1.0),
-//            getDriveSysIDRoutine().quasistatic(SysIdRoutine.Direction.kForward),
-//            WaitCommand(1.0),
-//            getDriveSysIDRoutine().quasistatic(SysIdRoutine.Direction.kReverse)
-//        )
-//    }
-//
-//    /**
-//     * Logging function to easily log for SysID.
-//     * @see SysIdRoutineLog
-//     * @param module The module to log.
-//     * @param log The SysIdRoutineLog to log to.
-//     */
-//    private fun logDriveMotor(module: SwerveModule, log: SysIdRoutineLog){
-//        log.motor(module.configuration.name)
-//            .voltage(Units.Volt.of(module.driveMotor.voltage))
-//            .linearPosition(Units.Meters.of(module.driveMotor.position))
-//            .linearVelocity(Units.MetersPerSecond.of(module.driveMotor.velocity))
-//    }
+    /**
+     * Get a SysIdRoutine for the drive motors.
+     * @see SysIdRoutine
+     * @return A custom SysIdRoutine for the drive motors.
+     */
+    fun getDriveSysIDRoutine(): SysIdRoutine {
+        return SysIdRoutine(
+            SysIdRoutine.Config(),
+            SysIdRoutine.Mechanism(
+                { volts: Measure<Voltage> ->
+                    swerveDrive.modules.forEach {
+                        it.driveMotor.voltage = volts.`in`(Volt)
+                    }
+                },
+                { log: SysIdRoutineLog ->
+                    swerveDrive.modules.forEach {
+                        logDriveMotor(it, log)
+                    }
+                },
+                this
+            )
+        )
+    }
+
+    /**
+     * Generate a full command to SysID the drive motors
+     * @return A command that SysIDs the drive motors.
+     */
+    fun getDriveSysIDCommand(): Command {
+        return SequentialCommandGroup(
+            getDriveSysIDRoutine().dynamic(SysIdRoutine.Direction.kForward),
+            WaitCommand(1.0),
+            getDriveSysIDRoutine().dynamic(SysIdRoutine.Direction.kReverse),
+            WaitCommand(1.0),
+            getDriveSysIDRoutine().quasistatic(SysIdRoutine.Direction.kForward),
+            WaitCommand(1.0),
+            getDriveSysIDRoutine().quasistatic(SysIdRoutine.Direction.kReverse)
+        )
+    }
+
+    /**
+     * Logging function to easily log for SysID.
+     * @see SysIdRoutineLog
+     * @param module The module to log.
+     * @param log The SysIdRoutineLog to log to.
+     */
+    private fun logDriveMotor(module: SwerveModule, log: SysIdRoutineLog){
+        log.motor(module.configuration.name)
+            .voltage(Volt.of(module.driveMotor.voltage))
+            .linearPosition(Meters.of(module.driveMotor.position))
+            .linearVelocity(MetersPerSecond.of(module.driveMotor.velocity))
+    }
 
 
 

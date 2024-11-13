@@ -10,7 +10,6 @@ import com.team2898.robot.Constants.ButtonConstants.ARM_DIRECT_STOWED
 import com.team2898.robot.Constants.ButtonConstants.ARM_DOWN
 import com.team2898.robot.Constants.ButtonConstants.ARM_UP
 import com.team2898.robot.Constants.ButtonConstants.SHOOT
-import com.team2898.robot.subsystems.Arm
 import edu.wpi.first.math.MathUtil
 import edu.wpi.first.wpilibj.GenericHID
 import edu.wpi.first.wpilibj.Joystick

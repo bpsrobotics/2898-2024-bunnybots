@@ -6,7 +6,6 @@
 package com.team2898.robot
 
 import com.revrobotics.CANSparkBase
-import com.team2898.robot.subsystems.Arm
 import edu.wpi.first.math.geometry.Translation2d
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics
 import edu.wpi.first.math.trajectory.TrapezoidProfile
@@ -161,7 +160,6 @@ class Constants {
         const val ArmMaxSpeed = 1.5
         const val Arm_MaxAccel = 1.5
         enum class ArmHeights(val position: Double) {
-            GROUND(Arm.LOWER_SOFT_STOP),
             STOWED(0.183),
             AMP(-0.1),
             SHOOTER1(1.0),
@@ -181,30 +179,6 @@ class Constants {
         val FLYWHEEL_CIRCUMFERENCE = 4.inches
         const val INTAKE_SPEED = 1.0
         const val INTAKE_DURATION = 0.5
-    }
-
-    object ClimberConstants{
-        const val CURRENT_LIMIT = 15
-        const val STALL_CURRENT = 20
-
-        const val ClimberMaxSpeed = 1.0
-        const val ClimberAcceleration = 1.0
-        enum class ClimbHeights(val position: Double) {
-            STOWED(0.0), //TODO guess what more real values needed
-            REACH(1.0),
-            LIFTOFF(0.6);
-
-            fun advance() = when (this) {
-                STOWED -> REACH
-                REACH -> LIFTOFF
-                LIFTOFF -> LIFTOFF
-            }
-            fun retract() = when (this) {
-                STOWED -> STOWED
-                REACH -> STOWED
-                LIFTOFF -> REACH
-            }
-        }
     }
 
     // set to operator/driver's preferences

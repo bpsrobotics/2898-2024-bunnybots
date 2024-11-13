@@ -10,10 +10,6 @@ import com.pathplanner.lib.auto.NamedCommands
 import com.pathplanner.lib.commands.PathPlannerAuto
 import com.team2898.engine.utils.Vector
 import com.team2898.robot.Constants.ArmConstants
-import com.team2898.robot.commands.ArmMove
-import com.team2898.robot.commands.InAndOut
-import com.team2898.robot.commands.IntakeNote
-import com.team2898.robot.commands.SetShooter
 import com.team2898.robot.commands.swerve.NavXReset
 import com.team2898.robot.commands.swerve.TeleopDriveCommand
 import com.team2898.robot.subsystems.*
@@ -71,15 +67,6 @@ class RobotContainer {
 
         SmartDashboard.putData("Auto mode", autoCommandChooser)
 
-        NamedCommands.registerCommand("ground", ArmMove(Constants.ArmConstants.ArmHeights.GROUND))
-        NamedCommands.registerCommand("speaker", ArmMove(Constants.ArmConstants.ArmHeights.SHOOTER2))
-        NamedCommands.registerCommand("stowed", ArmMove(Constants.ArmConstants.ArmHeights.STOWED))
-        NamedCommands.registerCommand("amp", ArmMove(Constants.ArmConstants.ArmHeights.AMP))
-        NamedCommands.registerCommand("intake", IntakeNote())
-        NamedCommands.registerCommand("setshooter", SetShooter())
-        NamedCommands.registerCommand("inAndOut", InAndOut())
-        NamedCommands.registerCommand("sixPiece1", ArmMove(Constants.ArmConstants.ArmHeights.SIXPIECE1))
-
     }
     fun getAutonomousCommand(): Command{
         val path = autoCommandChooser.selected
@@ -88,7 +75,6 @@ class RobotContainer {
 
     private fun initializeObjects() {
         Drivetrain
-        Arm
         Shooter
         Intake
     }
@@ -106,23 +92,7 @@ class RobotContainer {
         // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
         // cancelling on release.
         //m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand())
-        when {
-            OI.armSelectUp ->   Arm.setGoal(Arm.pos() - 0.1)
-            OI.armSelectDown -> Arm.setGoal(Arm.pos() + 0.1)
-            OI.resetGyro -> NavXReset()
-        }
-        when {
-            OI.armDirectGround ->   Arm.setGoal(ArmConstants.ArmHeights.GROUND.position)
-            OI.armDirectStowed ->   Arm.setGoal(ArmConstants.ArmHeights.STOWED.position)
-            OI.armDirectAmp ->      Arm.setGoal(ArmConstants.ArmHeights.AMP.position)
-            OI.armDirectShooter2 -> Arm.setGoal(ArmConstants.ArmHeights.SHOOTER2.position)
-        }
-        when {
-            OI.operatorTrigger ->              Shooter.setVoltage(8.0)
-            OI.hatVector == Vector(0,1) -> Shooter.setVoltage(-0.75)
-            else ->                            Shooter.stop()
 
-        }
         when (OI.hatVector) {
             Vector(0, -1) -> Intake.intake(0.55)
             Vector(0,1) -> Intake.outtake()

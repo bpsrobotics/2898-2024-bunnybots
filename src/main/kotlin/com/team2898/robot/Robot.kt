@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.util.Named
 import com.pathplanner.lib.auto.NamedCommands
 import com.team2898.robot.commands.*
 import com.team2898.robot.subsystems.*
-import com.team2898.robot.subsystems.Arm.pos
 import edu.wpi.first.cameraserver.CameraServer
 import edu.wpi.first.wpilibj.DataLogManager
 import edu.wpi.first.wpilibj.TimedRobot
@@ -61,7 +60,6 @@ class Robot : TimedRobot() {
 
     /** This function is called once each time the robot enters Disabled mode.  */
     override fun disabledInit() {
-        Arm.setGoal(Constants.ArmConstants.ArmHeights.STOWED.position)
     }
     override fun disabledPeriodic() {}
 
