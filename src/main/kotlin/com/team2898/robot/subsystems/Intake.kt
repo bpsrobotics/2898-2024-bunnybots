@@ -3,74 +3,96 @@ package com.team2898.robot.subsystems
 import com.revrobotics.CANSparkBase
 import com.revrobotics.CANSparkLowLevel
 import com.revrobotics.CANSparkMax
-import com.team2898.robot.Constants
-import com.team2898.robot.Constants.IntakeConstants.STOP_BUFFER
-import com.team2898.robot.RobotMap.IntakeBeamBreak
+
 
 import com.team2898.robot.RobotMap.IntakeId
-import edu.wpi.first.math.filter.Debouncer
-import edu.wpi.first.math.filter.LinearFilter
-import edu.wpi.first.wpilibj.DigitalInput
-import edu.wpi.first.wpilibj.Timer
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
+import com.team2898.robot.subsystems.Drivetrain.getDriveSysIDRoutine
+import com.team2898.robot.subsystems.ToteManipulator.motors
+
+import edu.wpi.first.units.Measure
+import edu.wpi.first.units.Units
+import edu.wpi.first.units.Units.Volt
+import edu.wpi.first.units.Voltage
+
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog
+import edu.wpi.first.wpilibj2.command.Command
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup
 import edu.wpi.first.wpilibj2.command.SubsystemBase
+import edu.wpi.first.wpilibj2.command.WaitCommand
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine
 import frc.engine.utils.initMotorControllers
 import kotlin.math.sign
 
 object Intake : SubsystemBase() {
     private val intakeMotor = CANSparkMax(IntakeId, CANSparkLowLevel.MotorType.kBrushed)
-    private val beamBreak = DigitalInput(IntakeBeamBreak)
-    var output = 0.0
-    val currentFilter = LinearFilter.movingAverage(20)
-    var currentAverage = 0.0
-    val buffer = Debouncer(0.1, Debouncer.DebounceType.kRising)
-    val bufferTimer = Timer()
-    val hasNote get() = beamBreak.get()
-    val intakeState get() = bufferTimer.hasElapsed(STOP_BUFFER)
-    val gracePeriod get() = !bufferTimer.hasElapsed(STOP_BUFFER + 5.0)
+
 
     init {
-        initMotorControllers(Constants.IntakeConstants.CURRENT_LIMIT, CANSparkBase.IdleMode.kBrake, intakeMotor)
+        intakeMotor.restoreFactoryDefaults()
+        intakeMotor.setSmartCurrentLimit(40)
+        intakeMotor.idleMode = CANSparkBase.IdleMode.kBrake
         intakeMotor.inverted = true
         intakeMotor.burnFlash()
-        bufferTimer.start()
 
-    }
-
-    override fun periodic() {
-        SmartDashboard.putNumber("intake current", intakeMotor.outputCurrent)
-        SmartDashboard.putBoolean("has note", hasNote)
-        SmartDashboard.putNumber("intake output", output)
-        SmartDashboard.putNumber("current average", currentAverage)
-        SmartDashboard.putNumber("intake timer ", bufferTimer.get())
-        SmartDashboard.putBoolean("beam break", beamBreak.get())
-        currentAverage = currentFilter.calculate(intakeMotor.outputCurrent)
-
-        intakeMotor.set(output)
-    }
-
-    fun intake(speed: Double){
-        if (!intakeState){
-            output = 0.0
-            return
-        }
-        if (buffer.calculate(hasNote) && !gracePeriod) {
-            output = 0.0
-            bufferTimer.restart()
-            return
-        }
-        if (gracePeriod && hasNote) {
-            output = speed
-        } else {
-            output = speed
-        }
 
 
     }
 
-    fun outtake() {
-        output = -0.4
+    /**
+     * The system identification routine for the launcher subsystem.
+     */
+    val routine: SysIdRoutine = SysIdRoutine(
+        SysIdRoutine.Config(),
+        SysIdRoutine.Mechanism(
+            { volts: Measure<Voltage> ->
+                intakeMotor.setVoltage(volts.`in`(Volt))
+            },
+            { log: SysIdRoutineLog ->
+                log.motor("intake")
+                    .voltage(Units.Volts.of(intakeMotor.appliedOutput * intakeMotor.busVoltage))
+                    .angularPosition(Units.Rotations.of(intakeMotor.encoder.position))
+                    .angularVelocity(Units.RPM.of(intakeMotor.encoder.velocity))
+                    .current(Units.Amps.of(intakeMotor.outputCurrent))
+            },
+            this
+        )
+    )
+
+    /**
+     * Creates a command to run a dynamic system identification routine
+     * @param direction The direction to run the routine in
+     * @return The command to run the routine
+     */
+    fun dynamicSysIDRoutine(direction: SysIdRoutine.Direction): Command? {
+        return routine.dynamic(direction)
     }
+
+    /**
+     * Creates a command to run a quasi-static system identification routine
+     * @param direction The direction to run the routine in
+     * @return The command to run the routine
+     */
+    fun quasiStaticSysIDRoutine(direction: SysIdRoutine.Direction): Command? {
+        return routine.quasistatic(direction)
+    }
+
+    /**
+     * Generate a full command to SysID the intake
+     * @return A command that SysIDs the intake
+     */
+    fun getIntakeSysIDCommand(): Command {
+        return SequentialCommandGroup(
+            dynamicSysIDRoutine(SysIdRoutine.Direction.kForward),
+            WaitCommand(2.0),
+            dynamicSysIDRoutine(SysIdRoutine.Direction.kReverse),
+            WaitCommand(2.0),
+            quasiStaticSysIDRoutine(SysIdRoutine.Direction.kForward),
+            WaitCommand(2.0),
+            quasiStaticSysIDRoutine(SysIdRoutine.Direction.kReverse)
+        )
+    }
+
+
 
 
 

@@ -10,9 +10,11 @@ import com.pathplanner.lib.auto.NamedCommands
 import com.pathplanner.lib.commands.PathPlannerAuto
 import com.team2898.engine.utils.Vector
 import com.team2898.robot.Constants.ArmConstants
+import com.team2898.robot.OI.driverX
 import com.team2898.robot.commands.swerve.NavXReset
 import com.team2898.robot.commands.swerve.TeleopDriveCommand
 import com.team2898.robot.subsystems.*
+import com.team2898.robot.subsystems.Drivetrain.getDriveSysIDCommand
 import edu.wpi.first.math.MathUtil
 import edu.wpi.first.wpilibj.Filesystem
 import edu.wpi.first.wpilibj.Joystick
@@ -75,7 +77,6 @@ class RobotContainer {
 
     private fun initializeObjects() {
         Drivetrain
-        Shooter
         Intake
     }
 
@@ -93,10 +94,13 @@ class RobotContainer {
         // cancelling on release.
         //m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand())
 
+        when {
+            driverX -> {
+                getDriveSysIDCommand()
+            }
+        }
         when (OI.hatVector) {
-            Vector(0, -1) -> Intake.intake(0.55)
-            Vector(0,1) -> Intake.outtake()
-            else ->               Intake.intake(0.0)
+            Vector(0, -1) -> Intake.getIntakeSysIDCommand()
         }
 
 

@@ -1,33 +1,43 @@
 package com.team2898.robot
 
 object RobotMap {
-    // SPARK MAX CAN IDs
-    const val FrontLeftDrivingCanId = 8
-    const val RearLeftDrivingCanId = 6
+    // Drivetrain CAN IDs
+    const val FrontLeftDrivingCanId = 11
+    const val FrontLeftCANCoderID = 12
+    const val FrontLeftTurningCanId = 10
+
+
+
+    const val RearLeftDrivingCanId = 8
+    const val RearLeftCANCoderID = 9
+    const val RearLeftTurningCanId = 7
+
+
     const val FrontRightDrivingCanId = 2
-    const val RearRightDrivingCanId = 4
-
-    const val FrontLeftTurningCanId = 7
-    const val RearLeftTurningCanId = 5
+    const val FrontRightCANCoderID = 3
     const val FrontRightTurningCanId = 1
-    const val RearRightTurningCanId = 3
 
-    const val Arm_left = 10
-    const val Arm_right = 9
-    const val IntakeId = 12
-    const val ShooterTopId = 13
-    const val ShooterBottomId = 11
-    const val ClimbPrimaryId = 14
-    const val ClimbSecondaryId = 15
 
-    // CANcoder IDs
-    const val FrontLeftCANCoderID = 44
-    const val FrontRightCANCoderID = 21
-    const val RearRightCANCoderID = 22
-    const val RearLeftCANCoderID = 33
 
-    //DIO IDs
-    const val ArmDigitalInput = 1
-    const val IntakeBeamBreak = 2
+    const val RearRightDrivingCanId = 5
+    const val RearRightCANCoderID = 6
+    const val RearRightTurningCanId = 4
+
+    // Subsystem CAN IDs
+    const val IntakeId = 13
+
+    const val PivotRight = 14
+    const val RollerRight = 15
+
+    const val PivotLeft = 16
+    const val RollerLeft = 17
+
+    const val RollerBot = 18
+
+    // DIO IDs
+
+    const val encoderRight = 1
+    const val encoderLeft = 2
+
 
 }
