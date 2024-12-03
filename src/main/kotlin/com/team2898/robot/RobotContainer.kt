@@ -9,7 +9,6 @@ import com.pathplanner.lib.auto.AutoBuilder
 import com.pathplanner.lib.auto.NamedCommands
 import com.pathplanner.lib.commands.PathPlannerAuto
 import com.team2898.engine.utils.Vector
-import com.team2898.robot.Constants.ArmConstants
 import com.team2898.robot.OI.driverX
 import com.team2898.robot.commands.swerve.NavXReset
 import com.team2898.robot.commands.swerve.TeleopDriveCommand
