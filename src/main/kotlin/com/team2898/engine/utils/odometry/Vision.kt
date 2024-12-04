@@ -1,5 +1,7 @@
 package com.team2898.engine.utils.odometry
 
+import com.team2898.robot.Constants
+import com.team2898.test.main
 import edu.wpi.first.apriltag.AprilTag
 import edu.wpi.first.apriltag.AprilTagFieldLayout
 import edu.wpi.first.apriltag.AprilTagFields
@@ -7,6 +9,9 @@ import edu.wpi.first.math.geometry.*
 import org.photonvision.EstimatedRobotPose
 import org.photonvision.PhotonCamera
 import org.photonvision.PhotonPoseEstimator
+import edu.wpi.first.wpilibj.Filesystem
+import java.io.File
+import java.nio.file.FileSystem
 import java.util.*
 
 
@@ -35,7 +40,9 @@ class Vision (
         Translation3d(0.5, 0.0, 0.5),
         Rotation3d(0.0, 0.0, 0.0)
     )
-    val aprilTagFieldLayout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2024Crescendo.m_resourceFile)
+
+    val aprilTagFieldLayout = AprilTagFieldLayout(Constants.VisionConstants.APRILTAG_FIELD.toPath())
+
 
     val PoseEstimator = PhotonPoseEstimator(
         aprilTagFieldLayout,

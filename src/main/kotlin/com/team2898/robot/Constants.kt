@@ -203,6 +203,9 @@ class Constants {
     object VisionConstants{
         const val RED_ALLIANCE_SPEAKER_TAG_ID = 4
         const val BLUE_ALLIANCE_SPEAKER_TAG_ID = 7
+
+        // get apriltag field
+        val APRILTAG_FIELD: File = File(Filesystem.getDeployDirectory(), "/AprilTags/bunnybots.json")
     }
 
 }
