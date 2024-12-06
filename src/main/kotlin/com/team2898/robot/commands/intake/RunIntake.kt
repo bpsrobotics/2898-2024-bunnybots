@@ -15,4 +15,8 @@ class RunIntake(val speed: DoubleSupplier) : Command() {
     override fun execute() {
         intakeSubsystem.intakeMotor.set(speed.asDouble)
     }
+
+    override fun isFinished(): Boolean {
+        return false
+    }
 }

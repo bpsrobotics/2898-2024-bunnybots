@@ -3,14 +3,12 @@ package com.team2898.robot.subsystems
 import com.revrobotics.CANSparkBase
 import com.revrobotics.CANSparkLowLevel
 import com.revrobotics.CANSparkMax
-import com.team2898.robot.RobotMap
 
 import com.team2898.robot.RobotMap.RollerBot
 import com.team2898.robot.RobotMap.RollerLeft
 import com.team2898.robot.RobotMap.RollerRight
 import edu.wpi.first.wpilibj.DoubleSolenoid
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value
-import edu.wpi.first.wpilibj.DutyCycleEncoder
 import edu.wpi.first.wpilibj.PneumaticsModuleType
 import edu.wpi.first.wpilibj2.command.SubsystemBase
 
@@ -23,7 +21,7 @@ object ToteManipulator : SubsystemBase() {
 
 
 
-    var grabState = Value.kReverse
+    var startState = Value.kReverse
     var speed = 0.0
 
     val motors = arrayOf(rollerRight, rollerLeft, rollerBot)
@@ -41,18 +39,19 @@ object ToteManipulator : SubsystemBase() {
         rollerRight.follow(rollerBot)
 
 
+        rightFinger.set(startState)
+        leftFinger.set(startState)
 
     }
 
     override fun periodic() {
-        rightFinger.set(grabState)
-        leftFinger.set(grabState)
+
         rollerBot.setVoltage(speed)
 
     }
 
 
-    fun setGrabbers() {
+    fun toggle() {
         rightFinger.toggle()
         leftFinger.toggle()
     }
