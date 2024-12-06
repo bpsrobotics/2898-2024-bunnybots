@@ -10,6 +10,8 @@ import com.pathplanner.lib.auto.NamedCommands
 import com.pathplanner.lib.commands.PathPlannerAuto
 import com.team2898.engine.utils.Vector
 import com.team2898.robot.OI.driverX
+import com.team2898.robot.OI.intakeSpeed
+import com.team2898.robot.commands.intake.RunIntake
 import com.team2898.robot.commands.swerve.NavXReset
 import com.team2898.robot.commands.swerve.TeleopDriveCommand
 import com.team2898.robot.subsystems.*
@@ -52,6 +54,7 @@ class RobotContainer {
         )
 
 
+    val intake: RunIntake = RunIntake({MathUtil.applyDeadband(-intakeSpeed, 0.1)})
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands.  */
@@ -63,6 +66,7 @@ class RobotContainer {
         autoCommandChooser = AutoBuilder.buildAutoChooser("6piece")
 
         Drivetrain.defaultCommand = teleopDrive
+        Intake.defaultCommand =  intake
 
         configureBindings()
 
