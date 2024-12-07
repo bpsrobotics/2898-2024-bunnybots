@@ -56,7 +56,7 @@ import java.util.function.BooleanSupplier
 
 
 object Drivetrain : SubsystemBase() {
-    public var swerveDrive: SwerveDrive
+    var swerveDrive: SwerveDrive
     private val visionDriveTest = false
 
     /** The maximum speed of the swerve drive */

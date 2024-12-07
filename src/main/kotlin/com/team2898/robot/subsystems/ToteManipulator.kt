@@ -45,7 +45,6 @@ object ToteManipulator : SubsystemBase() {
     }
 
     override fun periodic() {
-
         rollerBot.setVoltage(speed)
 
     }
