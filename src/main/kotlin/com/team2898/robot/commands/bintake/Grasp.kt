@@ -14,4 +14,8 @@ class Grasp : Command() {
         grabber.toggle()
     }
 
+    override fun isFinished(): Boolean {
+        return false
+    }
+
 }

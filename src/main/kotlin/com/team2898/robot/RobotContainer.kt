@@ -109,7 +109,7 @@ class RobotContainer {
         }
         when (OI.hatVector) {
             Vector(0, -1) -> Intake.getIntakeSysIDCommand()
-            Vector(0,1) -> RunBintake({0.1})
+            Vector(0,1) -> RunBintake({5.0})
         }
 
 
