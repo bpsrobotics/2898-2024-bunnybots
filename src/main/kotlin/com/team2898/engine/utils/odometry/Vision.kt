@@ -9,7 +9,9 @@ import edu.wpi.first.math.geometry.*
 import org.photonvision.EstimatedRobotPose
 import org.photonvision.PhotonCamera
 import org.photonvision.PhotonPoseEstimator
+import org.photonvision.targeting.PhotonTrackedTarget
 import edu.wpi.first.wpilibj.Filesystem
+import org.photonvision.targeting.PhotonPipelineResult
 import java.io.File
 import java.nio.file.FileSystem
 import java.util.*
@@ -90,6 +92,19 @@ class Vision (
         return result.hasTargets()
 
     }
+
+    fun getAllTrackedTargets() : List<PhotonTrackedTarget>{
+        val result = cam.latestResult
+        var targets: List<PhotonTrackedTarget> = result.getTargets()
+        return targets
+    }
+
+    fun getSpecificTag(tagId: Int) : MutableList<PhotonTrackedTarget> {
+        val result = cam.latestResult
+        return result.getTargets()
+    }
+
+
     fun getEstimatedPose(prevEstimatedRobotPose: Pose2d?): Optional<EstimatedRobotPose>? {
         if(prevEstimatedRobotPose != null) PoseEstimator.setReferencePose(prevEstimatedRobotPose)
         val pose = PoseEstimator.update() ?: return null
