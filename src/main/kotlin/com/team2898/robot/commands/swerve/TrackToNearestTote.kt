@@ -16,14 +16,14 @@ class TrackToNearestTote: Command() {
     private val runtime = Timer()
     private val vision = Vision("Camera_Module_v1")
     private val swerve: Drivetrain
-    var robotPose = Pose2d()
-    val validTags = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
-    var trackedID = 0
-    var translation = Translation2d()
-    var finished = false
+    private var robotPose = Pose2d()
+    private val validTags = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)
+    private var trackedID = 0
+    private var translation = Translation2d()
+    private var finished = false
 
-    fun getClosestTag(): Int {
-        var results = vision.getAllTrackedTargets()
+    private fun getClosestTag(): Int {
+        val results = vision.getAllTrackedTargets()
         val trackedDistances = mutableListOf<Double>()
         val trackedTags = mutableListOf<Int>()
         for (i in results){
