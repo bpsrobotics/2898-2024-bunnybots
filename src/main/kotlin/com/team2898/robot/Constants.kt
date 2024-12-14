@@ -32,8 +32,7 @@ import java.io.File
  */
 @Suppress("MemberVisibilityCanBePrivate")
 class Constants {
-    private val driverController = XboxController(0)
-    private val operatorController = Joystick(1)
+
 
     object DriveConstants {
         // Driving Parameters - Note that these are not the maximum capable speeds of
@@ -63,7 +62,7 @@ class Constants {
         const val BackLeftChassisAngularOffset   = 0.0
         const val BackRightChassisAngularOffset  = 0.0
 
-        // YAGSL File Configs
+        // YAGSL `File` Configs
         val DRIVE_CONFIG: File = File(Filesystem.getDeployDirectory(), "/swerve")
 
     }

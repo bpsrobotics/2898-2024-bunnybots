@@ -26,18 +26,13 @@ object RobotMap {
     // Subsystem CAN IDs
     const val IntakeId = 13
 
-    const val PivotRight = 14
-    const val RollerRight = 15
+    const val RollerRight = 14
 
-    const val PivotLeft = 16
-    const val RollerLeft = 17
+    const val RollerLeft = 15
 
-    const val RollerBot = 18
+    const val RollerBot = 16
 
     // DIO IDs
-
-    const val encoderRight = 1
-    const val encoderLeft = 2
 
 
 }

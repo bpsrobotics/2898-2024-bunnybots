@@ -59,13 +59,11 @@ import kotlin.jvm.optionals.getOrElse
 
 
 object Drivetrain : SubsystemBase() {
-
-    public var swerveDrive: SwerveDrive
+    var swerveDrive: SwerveDrive
     private val visionDriveTest = false
 
     /** The maximum speed of the swerve drive */
     var maximumSpeed: Double = Units.feetToMeters(14.5)
-
 
     /** SwerveModuleStates publisher for swerve display */
     var swerveStates: StructArrayPublisher<SwerveModuleState> = NetworkTableInstance.getDefault().

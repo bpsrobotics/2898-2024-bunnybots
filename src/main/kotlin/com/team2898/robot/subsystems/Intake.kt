@@ -8,6 +8,8 @@ import com.revrobotics.CANSparkMax
 import com.team2898.robot.RobotMap.IntakeId
 import com.team2898.robot.subsystems.Drivetrain.getDriveSysIDRoutine
 import com.team2898.robot.subsystems.ToteManipulator.motors
+import edu.wpi.first.math.controller.PIDController
+import edu.wpi.first.math.controller.SimpleMotorFeedforward
 
 import edu.wpi.first.units.Measure
 import edu.wpi.first.units.Units
@@ -24,8 +26,12 @@ import frc.engine.utils.initMotorControllers
 import kotlin.math.sign
 
 object Intake : SubsystemBase() {
-    private val intakeMotor = CANSparkMax(IntakeId, CANSparkLowLevel.MotorType.kBrushed)
-
+    val intakeMotor = CANSparkMax(IntakeId, CANSparkLowLevel.MotorType.kBrushless)
+    val ks = 0.0
+    val kv = 0.0
+    val ff = SimpleMotorFeedforward(ks, kv)
+    val pid = PIDController(0.0,0.0,0.0)
+    var intakeSpeed = 0.0
 
     init {
         intakeMotor.restoreFactoryDefaults()
@@ -91,6 +97,11 @@ object Intake : SubsystemBase() {
             quasiStaticSysIDRoutine(SysIdRoutine.Direction.kReverse)
         )
     }
+
+    fun runIntake(speed: Double) {
+        intakeSpeed = ff.calculate(speed) + pid.calculate(speed)
+    }
+
 
 
 

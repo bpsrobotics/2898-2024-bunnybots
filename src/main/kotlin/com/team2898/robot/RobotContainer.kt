@@ -6,26 +6,29 @@ package com.team2898.robot
 //import com.team2898.robot.Constants.OperatorConstants
 
 import com.pathplanner.lib.auto.AutoBuilder
-import com.pathplanner.lib.auto.NamedCommands
-import com.pathplanner.lib.commands.PathPlannerAuto
+
 import com.team2898.engine.utils.Vector
 import com.team2898.robot.OI.driverX
-import com.team2898.robot.commands.swerve.NavXReset
+import com.team2898.robot.OI.intakeSpeed
+import com.team2898.robot.OI.operatorTrigger
+import com.team2898.robot.OI.rightTrigger
+import com.team2898.robot.OI.translationX
+import com.team2898.robot.OI.translationY
+import com.team2898.robot.OI.turnX
+import com.team2898.robot.commands.bintake.Grasp
+import com.team2898.robot.commands.bintake.RunBintake
+import com.team2898.robot.commands.intake.RunIntake
 import com.team2898.robot.commands.swerve.TeleopDriveCommand
 import com.team2898.robot.subsystems.*
 import com.team2898.robot.subsystems.Drivetrain.getDriveSysIDCommand
 import edu.wpi.first.math.MathUtil
-import edu.wpi.first.wpilibj.Filesystem
 import edu.wpi.first.wpilibj.Joystick
 import edu.wpi.first.wpilibj.XboxController
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController
 import edu.wpi.first.wpilibj2.command.button.Trigger
-import java.io.File
-import kotlin.math.pow
-import kotlin.math.sign
+
 
 
 /**
@@ -39,19 +42,19 @@ class RobotContainer {
     //private val m_exampleSubsystem = ExampleSubsystem()
     // Replace with CommandPS4Controller or CommandJoystick if needed
     private val driverController = XboxController(0)
-    private val operatorController = Joystick(1)
 
     private var autoCommandChooser: SendableChooser<Command> = SendableChooser()
 
     val teleopDrive: TeleopDriveCommand =
         TeleopDriveCommand(
-            { MathUtil.applyDeadband(-driverController.leftY, 0.1) },
-            { MathUtil.applyDeadband(-driverController.leftX, 0.1) },
-            { MathUtil.applyDeadband(-driverController.rightX, 0.1)},
-            { driverController.rightTriggerAxis },
+            { MathUtil.applyDeadband(-translationY, 0.1) },
+            { MathUtil.applyDeadband(-translationX, 0.1) },
+            { MathUtil.applyDeadband(-turnX, 0.1)},
+            { rightTrigger },
         )
 
 
+    val intake: RunIntake = RunIntake({MathUtil.applyDeadband(-intakeSpeed, 0.1)})
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands.  */
@@ -63,6 +66,7 @@ class RobotContainer {
         autoCommandChooser = AutoBuilder.buildAutoChooser("6piece")
 
         Drivetrain.defaultCommand = teleopDrive
+        Intake.defaultCommand = intake
 
         configureBindings()
 
@@ -77,6 +81,7 @@ class RobotContainer {
     private fun initializeObjects() {
         Drivetrain
         Intake
+        ToteManipulator
     }
 
     /**
@@ -97,9 +102,14 @@ class RobotContainer {
             driverX -> {
                 getDriveSysIDCommand()
             }
+
+            operatorTrigger -> {
+                Grasp()
+            }
         }
         when (OI.hatVector) {
             Vector(0, -1) -> Intake.getIntakeSysIDCommand()
+            Vector(0,1) -> RunBintake({5.0})
         }
 
 
