@@ -1,0 +1,3 @@
+[submodule "src/main/kotlin/com/team2898/hedgehoglib"]
+	path = src/main/kotlin/com/team2898/hedgehoglib
+	url = https://github.com/bpsrobotics/hedgehoglib.git
