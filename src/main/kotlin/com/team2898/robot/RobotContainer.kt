@@ -11,6 +11,7 @@ import com.team2898.engine.utils.Vector
 import com.team2898.robot.OI.driverX
 import com.team2898.robot.OI.intakeSpeed
 import com.team2898.robot.OI.operatorTrigger
+import com.team2898.robot.OI.resetGyro
 import com.team2898.robot.OI.rightTrigger
 import com.team2898.robot.OI.translationX
 import com.team2898.robot.OI.translationY
@@ -18,7 +19,7 @@ import com.team2898.robot.OI.turnX
 import com.team2898.robot.commands.bintake.Grasp
 import com.team2898.robot.commands.bintake.RunBintake
 import com.team2898.robot.commands.intake.RunIntake
-import com.team2898.robot.commands.swerve.TeleopDriveCommand
+import com.team2898.robot.commands.swerve.NavXReset
 import com.team2898.robot.subsystems.*
 import com.team2898.robot.subsystems.Drivetrain.getDriveSysIDCommand
 import edu.wpi.first.math.MathUtil
@@ -28,7 +29,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import edu.wpi.first.wpilibj2.command.Command
 import edu.wpi.first.wpilibj2.command.button.Trigger
-
+import frc.robot.commands.swerve.TeleopDriveCommand
 
 
 /**
@@ -49,12 +50,13 @@ class RobotContainer {
         TeleopDriveCommand(
             { MathUtil.applyDeadband(-translationY, 0.1) },
             { MathUtil.applyDeadband(-translationX, 0.1) },
-            { MathUtil.applyDeadband(-turnX, 0.1)},
-            { rightTrigger },
+            { MathUtil.applyDeadband(turnX, 0.1)},
+            { true },
+            { false },
         )
 
 
-    val intake: RunIntake = RunIntake({MathUtil.applyDeadband(-intakeSpeed, 0.1)})
+    val intake: RunIntake = RunIntake({MathUtil.applyDeadband(-intakeSpeed, 0.5)})
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands.  */
@@ -71,6 +73,8 @@ class RobotContainer {
         configureBindings()
 
         SmartDashboard.putData("Auto mode", autoCommandChooser)
+
+
 
     }
     fun getAutonomousCommand(): Command{
@@ -105,6 +109,10 @@ class RobotContainer {
 
             operatorTrigger -> {
                 Grasp()
+            }
+
+            resetGyro -> {
+                NavXReset()
             }
         }
         when (OI.hatVector) {

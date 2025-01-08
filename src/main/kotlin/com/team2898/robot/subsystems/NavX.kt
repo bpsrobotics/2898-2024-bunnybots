@@ -15,7 +15,7 @@ object NavX : SubsystemBase() {
     var rotationalSpeed = 0.0
 
     init {
-        navx.angleAdjustment = -90.0
+        navx.angleAdjustment = 0.0
     }
 
     /** @return The NavX's angle multiplied by -1 */

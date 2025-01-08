@@ -7,6 +7,7 @@ import com.revrobotics.CANSparkMax
 import com.team2898.robot.RobotMap.RollerBot
 import com.team2898.robot.RobotMap.RollerLeft
 import com.team2898.robot.RobotMap.RollerRight
+import edu.wpi.first.wpilibj.Compressor
 import edu.wpi.first.wpilibj.DoubleSolenoid
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value
 import edu.wpi.first.wpilibj.PneumaticsModuleType
@@ -18,13 +19,12 @@ object ToteManipulator : SubsystemBase() {
     private val rollerBot = CANSparkMax(RollerBot, CANSparkLowLevel.MotorType.kBrushless)
     private val rightFinger = DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1)
     private val leftFinger = DoubleSolenoid(PneumaticsModuleType.REVPH, 2, 3)
-
-
+    private val compressor = Compressor(20,PneumaticsModuleType.REVPH)
 
     var startState = Value.kReverse
     var speed = 0.0
 
-    val motors = arrayOf(rollerRight, rollerLeft, rollerBot)
+    val motors = arrayOf(rollerRight, rollerLeft)
 
     init {
         for (motor in motors) {
@@ -35,8 +35,7 @@ object ToteManipulator : SubsystemBase() {
             motor.burnFlash()
         }
 
-        rollerLeft.follow(rollerBot, true)
-        rollerRight.follow(rollerBot)
+        rollerLeft.follow(rollerRight, true)
 
 
         rightFinger.set(startState)
@@ -45,8 +44,7 @@ object ToteManipulator : SubsystemBase() {
     }
 
     override fun periodic() {
-        rollerBot.setVoltage(speed)
-
+        rollerRight.set(speed)
     }
 
 

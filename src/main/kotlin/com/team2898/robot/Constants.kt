@@ -63,32 +63,12 @@ class Constants {
         const val BackRightChassisAngularOffset  = 0.0
 
         // YAGSL `File` Configs
-        val DRIVE_CONFIG: File = File(Filesystem.getDeployDirectory(), "/swerve")
+        val DRIVE_CONFIG: File = File(Filesystem.getDeployDirectory(), "swerve")
 
     }
 
     object ModuleConstants {
-        // The MAXSwerve module can be configured with one of three pinion gears: 12T, 13T, or 14T.
-        // This changes the drive speed of the module (a pinion gear with more teeth will result in a
-        // robot that drives faster).
-//        const val kDrivingMotorPinionTeeth = 14
 
-        // Invert the turning encoder, since the output shaft rotates in the opposite direction of
-        // the steering motor in the MAXSwerve Module.
-        const val TurningEncoderInverted = false
-
-        // Calculations required for driving motor conversion factors and feed forward
-        const val DrivingMotorFreeSpeedRps = NeoMotorConstants.FreeSpeedRpm / 60
-        const val WheelDiameterMeters = 0.0979840867
-        const val WheelCircumferenceMeters = WheelDiameterMeters * Math.PI
-
-        const val DrivingEncoderPositionFactor = (WheelDiameterMeters * Math.PI / 6.75) // Wheel Diameter * PI * Gear Ratio
-
-        const val DrivingEncoderVelocityFactor = DrivingEncoderPositionFactor / 60.0 // meters per second velocity
-        const val TurningEncoderPositionFactor = 2 * Math.PI // radians
-        const val TurningEncoderVelocityFactor = 2 * Math.PI / 60.0 // radians per second
-        const val TurningEncoderPositionPIDMinInput = 0.0 // radians
-        const val TurningEncoderPositionPIDMaxInput = TurningEncoderPositionFactor // radians
 //        var DrivingP = 0.1
 //        var DrivingI = 0.0
 //        var DrivingD = 0.0

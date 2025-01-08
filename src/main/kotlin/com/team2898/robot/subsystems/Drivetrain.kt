@@ -18,8 +18,14 @@ import com.team2898.robot.Constants.AutoConstants.RotationP
 import com.team2898.robot.Constants.AutoConstants.TranslationD
 import com.team2898.robot.Constants.AutoConstants.TranslationI
 import com.team2898.robot.Constants.AutoConstants.TranslationP
+import com.team2898.robot.OI.translationX
+import com.team2898.robot.OI.translationY
+import com.team2898.robot.OI.turnX
+import com.team2898.robot.OI.turnY
 import com.team2898.robot.subsystems.Drivetrain.swerveDrive
+import edu.wpi.first.math.MathUtil
 import edu.wpi.first.math.VecBuilder
+import edu.wpi.first.math.controller.PIDController
 import edu.wpi.first.math.geometry.Pose2d
 import edu.wpi.first.math.geometry.Rotation2d
 import edu.wpi.first.math.geometry.Translation2d
@@ -66,7 +72,14 @@ object Drivetrain : SubsystemBase() {
     var swerveStates: StructArrayPublisher<SwerveModuleState> = NetworkTableInstance.getDefault().
     getStructArrayTopic("SwerveStates/swerveStates", SwerveModuleState.struct).publish()
 
+//    var targetStates: StructArrayPublisher<SwerveModuleState> = NetworkTableInstance.getDefault().
+//    getStructArrayTopic("SwerveStates/targetStates", SwerveModuleState.struct).publish()
+//
+////    var targStates = arrayOf(swerveDrive.getTargetSpeeds(-translationY, -translationX, Rotation2d(-turnX)))
+
+
     /**
+     * Whether the robot should drive field oriented or robot oriented.
      * Whether the robot should drive field oriented or robot oriented.
      * @see drive
      */
@@ -82,8 +95,11 @@ object Drivetrain : SubsystemBase() {
         Constants.ModuleConstants.DrivingI = SmartDashboard.getNumber("DrivingKI", Constants.ModuleConstants.DrivingI)
         Constants.ModuleConstants.DrivingD = SmartDashboard.getNumber("DrivingKD", Constants.ModuleConstants.DrivingD)
 
+
         swerveStates.set(swerveDrive.states)
 
+//        targetStates.set()
+//        targetStates.set(getTargetSpeeds(-translationY, -translationX, Rotation2d(-turnX)))
     }
 
     init {
@@ -225,7 +241,7 @@ object Drivetrain : SubsystemBase() {
 
     /**
      * Return SysID command for angle motors from YAGSL
-     * @return A command that SysIDs the angle motors.
+     * @return A command that SysIDs the angle1 motors.
      */
     fun sysIdAngleMotorCommand(): Command {
         return SwerveDriveTest.generateSysIdCommand(
@@ -445,6 +461,25 @@ object Drivetrain : SubsystemBase() {
 
 
     /**
+     * PID Controller for the heading of the robot.
+     * Currently not used, as feedforward is a much better solution to fix drift.
+     */
+    val HeadingPID: PIDController = PIDController(0.005, 0.01, 0.0)
+
+
+    /**
+     * Calculate the heading PID for the robot.
+     * @param measurement The current heading of the robot.
+     * @param setpoint The desired heading of the robot.
+     * @return The calculated output of the PID controller.
+     */
+    @Deprecated("Use feedforward instead")
+    fun calculateHeadingPID(measurement: Double, setpoint: Double): Double {
+        return HeadingPID.calculate(measurement, setpoint)
+    }
+
+
+    /**
      * Set the standard deviations of the vision measurements.
      * @param stdDevX The standard deviation of the X component of the vision measurements.
      * @param stdDevY The standard deviation of the Y component of the vision measurements.
@@ -458,6 +493,26 @@ object Drivetrain : SubsystemBase() {
     /** function to toggle field oriented drive */
     fun toggleFieldOriented() {
         fieldOriented = !fieldOriented
+    }
+
+    fun driveFieldOriented(fieldSpeeds: ChassisSpeeds){
+        swerveDrive.driveFieldOriented(fieldSpeeds)
+    }
+
+    fun driveCommand(): Command {
+        return run{
+            val scaledInputs = SwerveMath.scaleTranslation(Translation2d(
+                MathUtil.applyDeadband(translationY, 0.1),
+                MathUtil.applyDeadband(translationX, 0.1)),
+                0.8
+            )
+            drive(swerveDrive.swerveController.getTargetSpeeds(scaledInputs.x, scaledInputs.y,
+                MathUtil.applyDeadband(turnX, 0.1),
+                MathUtil.applyDeadband(turnY, 0.1),
+                swerveDrive.odometryHeading.radians,
+                swerveDrive.maximumVelocity
+            ));
+        }
     }
 
 }
