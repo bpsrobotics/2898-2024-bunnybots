@@ -32,6 +32,8 @@ object RobotMap {
 
     const val RollerBot = 16
 
+    const val ElevatorID = 40
+
     // DIO IDs
 
 
